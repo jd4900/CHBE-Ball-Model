@@ -1,38 +1,113 @@
+#:kivy 1.1.0
+
 <BallModelUI>:
 
-    GridLayout:
+    canvas.before:
+        Color:
+            rgb: 0.65, 0.65, 0.65
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
-        cols: 3
-        spacing: '8dp'
-        size_hint_y: None
-        height: self.minimum_height
+    # BOD Group
+    Label:
+        text: "[b][size=24]BOD[/size][/b]"
+        markup: True
+        x: root.x + root.width * 0.01
+        top: self.height and root.y + root.height * 0.625
+        color: 0,0,0,1
+    ToggleButton:
+        text: 'Low'
+        active: True
+        group: 'BOD'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.25
+        top: self.height and root.y + root.height * 0.60
+    ToggleButton:
+        text: 'Medium'
+        active: True
+        group: 'BOD'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.5
+        top: self.height and root.y + root.height * 0.60
+    ToggleButton:
+        text: 'High'
+        active: True
+        group: 'BOD'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.75
+        top: self.height and root.y + root.height * 0.60
 
-        Label:
-            text: 'Choice 1'
+    # Acidity Group
+    Label:
+        text: '[b][size=24]Acidity[/size][/b]'
+        markup: True
+        x: root.x + root.width * 0.01
+        top: self.height and root.y + root.height * 0.525
+        color: 0,0,0,1
+    ToggleButton:
+        text: '4'
+        active: True
+        group: 'Acidity'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.25
+        top: self.height and root.y + root.height * 0.50
+    ToggleButton:
+        text: '7'
+        active: True
+        group: 'Acidity'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.5
+        top: self.height and root.y + root.height * 0.50
+    ToggleButton:
+        text: '10'
+        active: True
+        group: 'Acidity'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.75
+        top: self.height and root.y + root.height * 0.50
 
-        ToggleButton:
-            size_hint_y: None
-            height: '48dp'
-            text: 'A'
-            group: 'g1'
+    # Hardness Group
+    Label:
+        text: '[b][size=24]Hardness[/size][/b]'
+        markup: True
+        x: root.x + root.width * 0.01
+        top: self.height and root.y + root.height * 0.725
+        color: 0,0,0,1
+    ToggleButton:
+        text: '10 ppm'
+        active: True
+        group: 'Hardness'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.25
+        top: self.height and root.y + root.height * 0.70
+    ToggleButton:
+        text: '100 ppm'
+        active: True
+        group: 'Hardness'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.5
+        top: self.height and root.y + root.height * 0.70
+    ToggleButton:
+        text: '1000 ppm'
+        active: True
+        group: 'Hardness'
+        on_press: root.press(*args)
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.75
+        top: self.height and root.y + root.height * 0.70
 
-        ToggleButton:
-            size_hint_y: None
-            height: '48dp'
-            text: 'B'
-            group: 'g1'
-
-        Label:
-            text: 'Choice 2'
-
-        ToggleButton:
-            size_hint_y: None
-            height: '48dp'
-            text: 'A'
-            group: 'g2'
-
-        ToggleButton:
-            size_hint_y: None
-            height: '48dp'
-            text: 'B'
-            group: 'g2'
+    Button:
+        text: "[b]Execute[/b]"
+        markup: 'True'
+        on_press: root.execute()
+        x: root.x + root.width * 0.75
+        top: root.y + root.height * 0.25
