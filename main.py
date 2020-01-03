@@ -9,18 +9,18 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
+from kivy.logger import Logger
 
-import logging
 import time
 
 Config.set('graphics', 'resizable', True)
 
 def validate_inputs(Hardness, Acidity, BOD):
     if Hardness=='10 ppm' and Acidity=='7' and BOD=='Low':
-        logging.info("Dispensing good stuff")
+        Logger.info('APP: Dispensing good stuff')
         return True
     else:
-        logging.info("Dispensing bad stuff")
+        Logger.info('APP: Dispensing bad stuff')
         return False
 
 class BallModelUI(Widget):
@@ -56,7 +56,7 @@ class BallModelUI(Widget):
 
     def check_inputs(self):
         if any(item == None for item in [self.Hardness, self.Acidity, self.BOD]):
-            logging.warning("Input should not be None")
+            Logger.warning('APP: Input should not be None')
             self.mk_warning_popup()
         else:
             validate_inputs(self.Hardness, self.Acidity, self.BOD)
