@@ -1,8 +1,6 @@
 from kivy.uix.gridlayout import GridLayout
 from kivy.app import App
-from kivy.properties import StringProperty
 from kivy.uix.widget import Widget
-from kivy.uix.togglebutton import ToggleButton
 from kivy.config import Config
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
@@ -11,17 +9,17 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.logger import Logger
 
-import time
-
 Config.set('graphics', 'resizable', True)
 
+
 def validate_inputs(Hardness, Acidity, BOD):
-    if Hardness=='10 ppm' and Acidity=='7' and BOD=='Low':
+    if Hardness == '10 ppm' and Acidity == '7' and BOD == 'Low':
         Logger.info('APP: Dispensing good stuff')
         return True
     else:
         Logger.info('APP: Dispensing bad stuff')
         return False
+
 
 class BallModelUI(Widget):
 
@@ -30,32 +28,32 @@ class BallModelUI(Widget):
     BOD = None
 
     def get_inputs(self, button, state):
-        if button.group == "Hardness" and state is "down":
-            self.Hardness=button.text
-        elif button.group == "Acidity" and state is "down":
-            self.Acidity=button.text
-        elif button.group == "BOD" and state is "down":
-            self.BOD=button.text
-        elif button.group == "Hardness" and state is not "down":
+        if button.group == "Hardness" and state == "down":
+            self.Hardness = button.text
+        elif button.group == "Acidity" and state == "down":
+            self.Acidity = button.text
+        elif button.group == "BOD" and state == "down":
+            self.BOD = button.text
+        elif button.group == "Hardness" and state != "down":
             self.Hardness = None
-        elif button.group == "Acidity" and state is not "down":
+        elif button.group == "Acidity" and state != "down":
             self.Acidity = None
-        elif button.group == "BOD" and state is not "down":
+        elif button.group == "BOD" and state != "down":
             self.BOD = None
 
     def clear_button_state(self):
-            self.ids.button1.state = "normal"
-            self.ids.button2.state = "normal"
-            self.ids.button3.state = "normal"
-            self.ids.button4.state = "normal"
-            self.ids.button5.state = "normal"
-            self.ids.button6.state = "normal"
-            self.ids.button7.state = "normal"
-            self.ids.button8.state = "normal"
-            self.ids.button9.state = "normal"
+        self.ids.button1.state = "normal"
+        self.ids.button2.state = "normal"
+        self.ids.button3.state = "normal"
+        self.ids.button4.state = "normal"
+        self.ids.button5.state = "normal"
+        self.ids.button6.state = "normal"
+        self.ids.button7.state = "normal"
+        self.ids.button8.state = "normal"
+        self.ids.button9.state = "normal"
 
     def check_inputs(self):
-        if any(item == None for item in [self.Hardness, self.Acidity, self.BOD]):
+        if any(item is None for item in [self.Hardness, self.Acidity, self.BOD]):
             Logger.warning('APP: Input should not be None')
             self.mk_warning_popup()
         else:
@@ -75,7 +73,7 @@ class BallModelUI(Widget):
             content=self.pb
         )
 
-        self.popup.bind(on_open = self.puopen)
+        self.popup.bind(on_open=self.puopen)
         self.popup.open()
 
     def next(self, dt):
@@ -91,28 +89,29 @@ class BallModelUI(Widget):
         Clock.schedule_interval(self.next, 1 / 25)
 
     def mk_warning_popup(self):
-        layout = GridLayout(cols = 1, padding = 10)
-        
+        layout = GridLayout(cols=1, padding=10)
+
         popupLabel = Label(text="Missing Input!")
-        closeButton = Button(text = "Click to Return")
+        closeButton = Button(text="Click to Return")
 
         layout.add_widget(popupLabel)
         layout.add_widget(closeButton)
 
         popup = Popup(
-            title="Warning!", 
-            content = layout
+            title="Warning!",
+            content=layout
         )
-        
+
         popup.open()
 
-        closeButton.bind(on_press = popup.dismiss)
+        closeButton.bind(on_press=popup.dismiss)
 
 
 class BallModelApp(App):
     def build(self):
         self.title = "Ball Model"
         return BallModelUI()
+
 
 if __name__ == '__main__':
     BallModelApp().run()
