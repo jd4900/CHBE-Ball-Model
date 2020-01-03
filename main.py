@@ -7,8 +7,11 @@ from kivy.config import Config
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.progressbar import ProgressBar
+from kivy.clock import Clock
 
 import logging
+import time
 
 Config.set('graphics', 'resizable', True)
 
@@ -40,13 +43,24 @@ class BallModelUI(Widget):
         elif button.group == "BOD" and state is not "down":
             self.BOD = None
 
+    def clear_button_state(self):
+            self.ids.button1.state = "normal"
+            self.ids.button2.state = "normal"
+            self.ids.button3.state = "normal"
+            self.ids.button4.state = "normal"
+            self.ids.button5.state = "normal"
+            self.ids.button6.state = "normal"
+            self.ids.button7.state = "normal"
+            self.ids.button8.state = "normal"
+            self.ids.button9.state = "normal"
 
     def check_inputs(self):
         if any(item == None for item in [self.Hardness, self.Acidity, self.BOD]):
             logging.warning("Input should not be None")
-            self.mkpopup()
+            self.mk_warning_popup()
         else:
             validate_inputs(self.Hardness, self.Acidity, self.BOD)
+            self.mk_dispense_bar()
 
     def press(self, *args):
         self.get_inputs(args[0], args[1])
@@ -54,7 +68,29 @@ class BallModelUI(Widget):
     def execute(self):
         self.check_inputs()
 
-    def mkpopup(self):
+    def mk_dispense_bar(self):        
+        self.pb = ProgressBar(max=100)
+        self.popup = Popup(
+            title="Evacuating Holding Tank!",
+            content=self.pb
+        )
+
+        self.popup.bind(on_open = self.puopen)
+        self.popup.open()
+
+    def next(self, dt):
+        if self.pb.value >= 100:
+            self.clear_button_state()
+            self.pb.value = 0
+
+            self.popup.dismiss()
+        else:
+            self.pb.value += 1
+
+    def puopen(self, instance):
+        Clock.schedule_interval(self.next, 1 / 25)
+
+    def mk_warning_popup(self):
         layout = GridLayout(cols = 1, padding = 10)
         
         popupLabel = Label(text="Missing Input!")
