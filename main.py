@@ -79,7 +79,6 @@ class BallModelUI(Widget):
     def next(self, dt):
         if self.pb.value >= 100:
             self.clear_button_state()
-            self.pb.value = 0
             self.event.cancel()
 
             self.popup.dismiss()
