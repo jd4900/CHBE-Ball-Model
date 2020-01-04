@@ -80,13 +80,14 @@ class BallModelUI(Widget):
         if self.pb.value >= 100:
             self.clear_button_state()
             self.pb.value = 0
+            self.event.cancel()
 
             self.popup.dismiss()
         else:
             self.pb.value += 1
 
     def puopen(self, instance):
-        Clock.schedule_interval(self.next, 1 / 25)
+        self.event = Clock.schedule_interval(self.next, 1 / 25)
 
     def mk_warning_popup(self):
         layout = GridLayout(cols=1, padding=10)
