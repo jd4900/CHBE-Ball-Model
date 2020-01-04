@@ -11,6 +11,9 @@ from kivy.logger import Logger
 
 Config.set('graphics', 'resizable', True)
 
+WARNING_RED = [255/255, 51/255, 51/255, 1]
+GOOD_GREEN = [30/255, 130/255, 76/255, 1]
+
 
 def validate_inputs(Hardness, Acidity, BOD):
     if Hardness == '10 ppm' and Acidity == '7' and BOD == 'Low':
@@ -57,8 +60,8 @@ class BallModelUI(Widget):
             Logger.warning('APP: Input should not be None')
             self.mk_warning_popup()
         else:
-            validate_inputs(self.Hardness, self.Acidity, self.BOD)
-            self.mk_dispense_bar()
+            is_correct = validate_inputs(self.Hardness, self.Acidity, self.BOD)
+            self.mk_dispense_bar(is_correct)
 
     def press(self, *args):
         self.get_inputs(args[0], args[1])
@@ -66,12 +69,22 @@ class BallModelUI(Widget):
     def execute(self):
         self.check_inputs()
 
-    def mk_dispense_bar(self):        
+    def mk_dispense_bar(self, is_correct):
         self.pb = ProgressBar(max=100)
         self.popup = Popup(
             title="Evacuating Holding Tank!",
-            content=self.pb
+            title_size='24sp',
+            size_hint=(None, None), size=(400, 200),
+            title_color=WARNING_RED,
+            separator_color=WARNING_RED,
+            content=self.pb,
+            auto_dismiss=False
         )
+
+        if is_correct is True:
+            self.popup.title = "Dispensing Liquid Product!"
+            self.popup.title_color = GOOD_GREEN
+            self.popup.separator_color = GOOD_GREEN
 
         self.popup.bind(on_open=self.puopen)
         self.popup.open()
@@ -106,8 +119,8 @@ class BallModelUI(Widget):
             title_size='24sp',
             content=layout,
             size_hint=(None, None), size=(400, 400),
-            separator_color=[255, 0, 0, 1],
-            title_color=[255/255, 51/255, 51/255, 1]
+            separator_color=WARNING_RED,
+            title_color=WARNING_RED
         )
 
         popup.open()
