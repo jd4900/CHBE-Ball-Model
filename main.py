@@ -17,10 +17,8 @@ GOOD_GREEN = [30/255, 130/255, 76/255, 1]
 
 def validate_inputs(Hardness, Acidity, BOD):
     if Hardness == '10 ppm' and Acidity == '7' and BOD == 'Low':
-        Logger.info('APP: Dispensing good stuff')
         return True
     else:
-        Logger.info('APP: Dispensing bad stuff')
         return False
 
 
@@ -55,6 +53,8 @@ class BallModelUI(Widget):
         self.ids.button8.state = "normal"
         self.ids.button9.state = "normal"
 
+        Logger.info("APP: Button state cleared")
+
     def check_inputs(self):
         if any(item is None for item in [self.Hardness, self.Acidity, self.BOD]):
             Logger.warning('APP: Input should not be None')
@@ -82,9 +82,12 @@ class BallModelUI(Widget):
         )
 
         if is_correct is True:
+            Logger.info('APP: Dispensing good stuff')
             self.popup.title = "Dispensing Liquid Product!"
             self.popup.title_color = GOOD_GREEN
             self.popup.separator_color = GOOD_GREEN
+        else:
+            Logger.info('APP: Dispensing bad stuff')
 
         self.popup.bind(on_open=self.puopen)
         self.popup.open()
@@ -105,7 +108,7 @@ class BallModelUI(Widget):
         layout = GridLayout(cols=1, padding=10)
 
         popupLabel = Label(
-            text="[color=ff0000][b][size=24]Missing Input![/size][/b][/color]",
+            text="[color=ff3333][b][size=24]Missing Input![/size][/b][/color]",
             markup=True,
         )
 
