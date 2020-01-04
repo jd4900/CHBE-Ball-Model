@@ -10,6 +10,7 @@ from kivy.clock import Clock
 from kivy.logger import Logger
 
 Config.set('graphics', 'resizable', True)
+Config.set('kivy', 'window_icon', 'assets/icon.png')
 
 WARNING_RED = [255/255, 51/255, 51/255, 1]
 GOOD_GREEN = [30/255, 130/255, 76/255, 1]

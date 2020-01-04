@@ -9,6 +9,13 @@
             pos: self.pos
             size: self.size
 
+    Image:
+        source: 'assets/logo.png'
+        x: root.x + root.width * 0.60
+        size: self.texture
+        top: self.height and root.y + root.height * 0.95
+        size: root.width - 500, root.height - 500
+
     # BOD Group
     Label:
         text: "[b][size=24]BOD[/size][/b]"
