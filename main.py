@@ -91,7 +91,11 @@ class BallModelUI(Widget):
     def mk_warning_popup(self):
         layout = GridLayout(cols=1, padding=10)
 
-        popupLabel = Label(text="Missing Input!")
+        popupLabel = Label(
+            text="[color=ff0000][b][size=24]Missing Input![/size][/b][/color]",
+            markup=True,
+        )
+
         closeButton = Button(text="Click to Return")
 
         layout.add_widget(popupLabel)
@@ -99,7 +103,11 @@ class BallModelUI(Widget):
 
         popup = Popup(
             title="Warning!",
-            content=layout
+            title_size='24sp',
+            content=layout,
+            size_hint=(None, None), size=(400, 400),
+            separator_color=[255, 0, 0, 1],
+            title_color=[255/255, 51/255, 51/255, 1]
         )
 
         popup.open()
