@@ -9,14 +9,22 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.logger import Logger
 
+# Configure App
 Config.set('graphics', 'resizable', True)
 Config.set('kivy', 'window_icon', 'assets/icon.png')
 
+# Color Constants for Pop-ups
 WARNING_RED = [255/255, 51/255, 51/255, 1]
 GOOD_GREEN = [30/255, 130/255, 76/255, 1]
 
+# Constants for ProgressBar
+MAX_VALUE = 100
+LOADING_TIME = 4  # seconds
+TIMEOUT = LOADING_TIME / MAX_VALUE
+
 
 def validate_inputs(Hardness, Acidity, BOD):
+    # Helper Function for deciding which valve will open
     if Hardness == '10 ppm' and Acidity == '7' and BOD == 'Low':
         return True
     else:
@@ -30,6 +38,8 @@ class BallModelUI(Widget):
     BOD = None
 
     def get_inputs(self, button, state):
+        # Ensures that App variables are clear if state is not down
+        # and sets App variable to selected button when pressed
         if button.group == "Hardness" and state == "down":
             self.Hardness = button.text
         elif button.group == "Acidity" and state == "down":
@@ -44,6 +54,7 @@ class BallModelUI(Widget):
             self.BOD = None
 
     def clear_button_state(self):
+        # Clear all states when `Execute` is pressed
         self.ids.button1.state = "normal"
         self.ids.button2.state = "normal"
         self.ids.button3.state = "normal"
@@ -57,21 +68,26 @@ class BallModelUI(Widget):
         Logger.info("APP: Button state cleared")
 
     def check_inputs(self):
+        # Ensures App has value for Hardness, Acidity, and BOD when Execute is pressed
         if any(item is None for item in [self.Hardness, self.Acidity, self.BOD]):
             Logger.warning('APP: Input should not be None')
             self.mk_warning_popup()
         else:
             is_correct = validate_inputs(self.Hardness, self.Acidity, self.BOD)
             self.mk_dispense_bar(is_correct)
+            # TODO: Add code for opening and closing valve here
 
     def press(self, *args):
+        # Wrapper Function for get_inputs. FIXME: Really not doing much and should be removed
         self.get_inputs(args[0], args[1])
 
     def execute(self):
+        # Wrapper function for check_inputs. FIXME: Really not doing much and should be removed
         self.check_inputs()
 
     def mk_dispense_bar(self, is_correct):
-        self.pb = ProgressBar(max=100)
+        # Makes dispense bar popup depending on if the inputs are correct or not.
+        self.pb = ProgressBar(max=MAX_VALUE)
         self.popup = Popup(
             title="Evacuating Holding Tank!",
             title_size='24sp',
@@ -94,7 +110,9 @@ class BallModelUI(Widget):
         self.popup.open()
 
     def next(self, dt):
-        if self.pb.value >= 100:
+        # Increase the value of the progress bar until it reaches MAX_VALUE.
+        # Then clears state, cancels event, and dismisses the popup.
+        if self.pb.value >= MAX_VALUE:
             self.clear_button_state()
             self.event.cancel()
 
@@ -103,9 +121,10 @@ class BallModelUI(Widget):
             self.pb.value += 1
 
     def puopen(self, instance):
-        self.event = Clock.schedule_interval(self.next, 1 / 25)
+        self.event = Clock.schedule_interval(self.next, TIMEOUT)
 
     def mk_warning_popup(self):
+        # Makes Warning Popup if input is missing.
         layout = GridLayout(cols=1, padding=10)
 
         popupLabel = Label(
