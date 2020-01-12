@@ -7,6 +7,7 @@ GPIO_PIN_18 = 18
 
 def init_valve():
     GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
     GPIO.setup(GPIO_PIN_17, GPIO.OUT)
     GPIO.setup(GPIO_PIN_18, GPIO.OUT)
 
