@@ -9,6 +9,8 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.logger import Logger
 
+from valve import init_valve, open_valve, close_valve
+
 # Configure App
 Config.set('graphics', 'resizable', True)
 Config.set('kivy', 'window_icon', 'assets/icon.png')
@@ -21,6 +23,8 @@ GOOD_GREEN = [30/255, 130/255, 76/255, 1]
 MAX_VALUE = 100
 LOADING_TIME = 4  # seconds
 TIMEOUT = LOADING_TIME / MAX_VALUE
+
+init_valve()
 
 
 def validate_inputs(Hardness, Acidity, BOD):
@@ -77,6 +81,9 @@ class BallModelUI(Widget):
             self.mk_dispense_bar(is_correct)
             # TODO: Add code for opening and closing valve here
 
+            open_valve()
+            Logger.info('APP: Valve is opening')
+
     def press(self, *args):
         # Wrapper Function for get_inputs. FIXME: Really not doing much and should be removed
         self.get_inputs(args[0], args[1])
@@ -117,6 +124,10 @@ class BallModelUI(Widget):
             self.event.cancel()
 
             self.popup.dismiss()
+            close_valve()
+
+            Logger.warning('APP: Valve is closed')
+
         else:
             self.pb.value += 1
 
