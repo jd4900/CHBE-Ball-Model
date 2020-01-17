@@ -24,7 +24,17 @@ MAX_VALUE = 100
 LOADING_TIME = 4  # seconds
 TIMEOUT = LOADING_TIME / MAX_VALUE
 
-init_valve()
+# Valve Constants
+GPIO_PIN_17 = 17
+GPIO_PIN_18 = 18
+BLACK_VALVE = [GPIO_PIN_17, GPIO_PIN_18]
+
+GPIO_PIN_22 = 22
+GPIO_PIN_23 = 23
+BLUE_VALVE = [GPIO_PIN_22, GPIO_PIN_23]
+
+init_valve(BLUE_VALVE)
+init_valve(BLACK_VALVE)
 
 
 def validate_inputs(Hardness, Acidity, BOD):
@@ -81,7 +91,11 @@ class BallModelUI(Widget):
             self.mk_dispense_bar(is_correct)
             # TODO: Add code for opening and closing valve here
 
-            open_valve()
+            open_valve(BLACK_VALVE)
+
+            if is_correct:
+                open_valve(BLUE_VALVE)
+
             Logger.info('APP: Valve is opening')
 
     def press(self, *args):
@@ -124,7 +138,8 @@ class BallModelUI(Widget):
             self.event.cancel()
 
             self.popup.dismiss()
-            close_valve()
+            close_valve(BLACK_VALVE)
+            close_valve(BLUE_VALVE)
 
             Logger.warning('APP: Valve is closed')
 

@@ -1,34 +1,32 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-GPIO_PIN_17 = 17
-GPIO_PIN_18 = 18
 
-
-def init_valve():
+def init_valve(valve):
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    GPIO.setup(GPIO_PIN_17, GPIO.OUT)
-    GPIO.setup(GPIO_PIN_18, GPIO.OUT)
+    GPIO.setup(valve[0], GPIO.OUT)
+    GPIO.setup(valve[1], GPIO.OUT)
 
     close_valve()
 
 
-def open_valve():
-    GPIO.output(GPIO_PIN_17, GPIO.HIGH)
-    GPIO.output(GPIO_PIN_18, GPIO.LOW)
+def open_valve(valve):
+    GPIO.output(valve[0], GPIO.HIGH)
+    GPIO.output(valve[1], GPIO.LOW)
 
 
-def close_valve():
-    GPIO.output(GPIO_PIN_17, GPIO.LOW)
-    GPIO.output(GPIO_PIN_18, GPIO.HIGH)
+def close_valve(valve):
+    GPIO.output(valve[0], GPIO.LOW)
+    GPIO.output(valve[1], GPIO.HIGH)
 
 
 if __name__ == "__main__":
-    init_valve()
+    init_valve([22, 23])
+    init_valve([22, 23])
 
-    open_valve()
+    open_valve([22, 23])
 
     sleep(10)
 
-    close_valve()
+    close_valve([22, 23])
