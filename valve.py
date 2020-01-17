@@ -8,7 +8,7 @@ def init_valve(valve):
     GPIO.setup(valve[0], GPIO.OUT)
     GPIO.setup(valve[1], GPIO.OUT)
 
-    close_valve(valve[0], valve[1])
+    close_valve(valve)
 
 
 def open_valve(valve):
