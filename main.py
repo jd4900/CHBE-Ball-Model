@@ -95,8 +95,6 @@ class BallModelUI(Widget):
 
             if is_correct:
                 open_valve(BLUE_VALVE)
-            else:
-                self.mk_caution_popup()
 
             Logger.info('APP: Valve is opening')
 
@@ -112,8 +110,8 @@ class BallModelUI(Widget):
         # Makes dispense bar popup depending on if the inputs are correct or not.
         self.pb = ProgressBar(max=MAX_VALUE)
         self.popup = Popup(
-            title="Evacuating Holding Tank!",
-            title_size='24sp',
+            title="WARNING! TOXIC!",
+            title_size='56sp',
             size_hint=(None, None), size=(400, 200),
             title_color=WARNING_RED,
             separator_color=WARNING_RED,
@@ -123,7 +121,7 @@ class BallModelUI(Widget):
 
         if is_correct is True:
             Logger.info('APP: Dispensing good stuff')
-            self.popup.title = "Dispensing Liquid Product!"
+            self.popup.title = "Successfully Neutralized!"
             self.popup.title_color = GOOD_GREEN
             self.popup.separator_color = GOOD_GREEN
         else:
@@ -182,7 +180,7 @@ class BallModelUI(Widget):
         self.dismiss()
 
     def mk_caution_popup(self):
-        # Makes Warning Popup if input is missing.
+        # Makes Caution Popup if input is missing.
         layout = GridLayout(cols=1, padding=10)
 
         popupLabel = Label(
