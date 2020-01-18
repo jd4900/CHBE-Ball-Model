@@ -95,6 +95,8 @@ class BallModelUI(Widget):
 
             if is_correct:
                 open_valve(BLUE_VALVE)
+            else:
+                self.mk_caution_popup()
 
             Logger.info('APP: Valve is opening')
 
@@ -175,6 +177,33 @@ class BallModelUI(Widget):
         popup.open()
 
         closeButton.bind(on_press=popup.dismiss)
+
+    def dismiss_popup(self, dt):
+        self.dismiss()
+
+    def mk_caution_popup(self):
+        # Makes Warning Popup if input is missing.
+        layout = GridLayout(cols=1, padding=10)
+
+        popupLabel = Label(
+            text="[color=ff3333][b][size=32]WARNING! TOXIC! [/size][/b][/color]",
+            markup=True,
+        )
+
+        layout.add_widget(popupLabel)
+
+        popup = Popup(
+            title="WARNING!",
+            title_size='32sp',
+            content=layout,
+            size_hint=(None, None), size=(400, 400),
+            separator_color=WARNING_RED,
+            title_color=WARNING_RED
+        )
+
+        popup.open()
+
+        Clock.schedule_once(self.dismiss_popup, 5)
 
 
 class BallModelApp(App):

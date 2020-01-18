@@ -1,3 +1,4 @@
 env/
 ball_model.egg-info
 .vscode/
+__pycache__/
