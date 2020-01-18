@@ -15,17 +15,33 @@ def open_valve(valve):
     GPIO.output(valve[0], GPIO.HIGH)
     GPIO.output(valve[1], GPIO.LOW)
 
+    sleep(5)
+    GPIO.output(valve[0], GPIO.LOW)
+
 
 def close_valve(valve):
     GPIO.output(valve[0], GPIO.LOW)
     GPIO.output(valve[1], GPIO.HIGH)
 
+    sleep(5)
+    GPIO.output(valve[1], GPIO.LOW)
+
 
 if __name__ == "__main__":
-    init_valve([22, 23])
 
-    open_valve([22, 23])
+    BLUE = [17, 18]
+    BLACK = [22, 23]
 
-    sleep(10)
+    while True:
+        command = input("Enter a command: ")
 
-    close_valve([22, 23])
+        if command == "or":
+            open_valve(BLUE)
+        elif command == "ol":
+            open_valve(BLACK)
+        elif command == "cr":
+            close_valve(BLUE)
+        elif command == "cl":
+            close_valve(BLACK)
+
+        continue
