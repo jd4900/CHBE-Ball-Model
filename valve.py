@@ -32,6 +32,9 @@ if __name__ == "__main__":
     BLUE = [17, 18]
     BLACK = [22, 23]
 
+    init_valve(BLUE)
+    init_valve(BLACK)
+
     while True:
         command = input("Enter a command: ")
 
