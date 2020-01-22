@@ -9,6 +9,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.clock import Clock
 from kivy.logger import Logger
 
+import threading
 from valve import init_valve, open_valve, close_valve
 
 # Configure App
@@ -43,6 +44,14 @@ def validate_inputs(Hardness, Acidity, BOD):
         return True
     else:
         return False
+
+
+def open_valve_thread(valve_name):
+    threading.Thread(target=open_valve, name=valve_name, args=(valve_name, )).start()
+
+
+def close_valve_thread(valve_name):
+    threading.Thread(target=close_valve, name=valve_name, args=(valve_name, )).start()
 
 
 class BallModelUI(Widget):
@@ -91,10 +100,10 @@ class BallModelUI(Widget):
             self.mk_dispense_bar(is_correct)
             # TODO: Add code for opening and closing valve here
 
-            open_valve(BLACK_VALVE)
+            open_valve_thread(BLACK_VALVE)
 
             if is_correct:
-                open_valve(BLUE_VALVE)
+                open_valve_thread(BLUE_VALVE)
 
             Logger.info('APP: Valve is opening')
 
@@ -138,8 +147,8 @@ class BallModelUI(Widget):
             self.event.cancel()
 
             self.popup.dismiss()
-            close_valve(BLACK_VALVE)
-            close_valve(BLUE_VALVE)
+            close_valve_thread(BLACK_VALVE)
+            close_valve_thread(BLUE_VALVE)
 
             Logger.warning('APP: Valve is closed')
 
