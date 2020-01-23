@@ -1,30 +1,48 @@
-import RPi.GPIO as GPIO
 from time import sleep
+import logging
 
+try:
+    import RPi.GPIO as GPIO
 
-def init_valve(valve):
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    GPIO.setup(valve[0], GPIO.OUT)
-    GPIO.setup(valve[1], GPIO.OUT)
+    def init_valve(valve):
+        logging.info("Valve: Initing %s valve!", valve)
 
-    close_valve(valve)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(valve[0], GPIO.OUT)
+        GPIO.setup(valve[1], GPIO.OUT)
 
+        close_valve(valve)
 
-def open_valve(valve):
-    GPIO.output(valve[0], GPIO.HIGH)
-    GPIO.output(valve[1], GPIO.LOW)
+    def open_valve(valve):
+        logging.info("Valve: Opening %s valve!", valve)
 
-    sleep(5)
-    GPIO.output(valve[0], GPIO.LOW)
+        GPIO.output(valve[0], GPIO.HIGH)
+        GPIO.output(valve[1], GPIO.LOW)
 
+        sleep(5)
+        GPIO.output(valve[0], GPIO.LOW)
 
-def close_valve(valve):
-    GPIO.output(valve[0], GPIO.LOW)
-    GPIO.output(valve[1], GPIO.HIGH)
+    def close_valve(valve):
+        logging.info("Valve: Closing %s valve!", valve)
 
-    sleep(5)
-    GPIO.output(valve[1], GPIO.LOW)
+        GPIO.output(valve[0], GPIO.LOW)
+        GPIO.output(valve[1], GPIO.HIGH)
+
+        sleep(5)
+        GPIO.output(valve[1], GPIO.LOW)
+
+except ModuleNotFoundError:
+    logging.warning("Valve: Could not import GPIO")
+
+    def init_valve(valve=None):
+        logging.info("Valve: Initing %s valve!", valve)
+
+    def open_valve(valve=None):
+        logging.info("Valve: Opening %s valve!", valve)
+
+    def close_valve(valve=None):
+        logging.info("Valve: Closing %s valve!", valve)
 
 
 if __name__ == "__main__":

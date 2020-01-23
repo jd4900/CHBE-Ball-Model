@@ -102,11 +102,6 @@ class BallModelUI(Widget):
 
             open_valve_thread(BLACK_VALVE)
 
-            if is_correct:
-                open_valve_thread(BLUE_VALVE)
-
-            Logger.info('APP: Valve is opening')
-
     def press(self, *args):
         # Wrapper Function for get_inputs. FIXME: Really not doing much and should be removed
         self.get_inputs(args[0], args[1])
@@ -133,10 +128,12 @@ class BallModelUI(Widget):
             self.popup.title = "Successfully Neutralized!"
             self.popup.title_color = GOOD_GREEN
             self.popup.separator_color = GOOD_GREEN
+            self.pb.max = MAX_VALUE*2
+            self.popup.bind(on_open=self.puopen_sucess)
         else:
             Logger.info('APP: Dispensing bad stuff')
+            self.popup.bind(on_open=self.puopen)
 
-        self.popup.bind(on_open=self.puopen)
         self.popup.open()
 
     def next(self, dt):
@@ -148,15 +145,35 @@ class BallModelUI(Widget):
 
             self.popup.dismiss()
             close_valve_thread(BLACK_VALVE)
+
+        else:
+            self.pb.value += 1
+
+    def next_success(self, dt):
+        # Increase the value of the progress bar until it reaches MAX_VALUE.
+        # Then clears state, cancels event, and dismisses the popup.
+
+        if self.pb.value >= MAX_VALUE*2:
+
+            self.clear_button_state()
+            self.event.cancel()
+            self.popup.dismiss()
             close_valve_thread(BLUE_VALVE)
 
-            Logger.warning('APP: Valve is closed')
+        elif self.pb.value == MAX_VALUE:
+
+            close_valve_thread(BLACK_VALVE)
+            open_valve_thread(BLUE_VALVE)
+            self.pb.value += 1
 
         else:
             self.pb.value += 1
 
     def puopen(self, instance):
         self.event = Clock.schedule_interval(self.next, TIMEOUT)
+
+    def puopen_sucess(self, instance):
+        self.event = Clock.schedule_interval(self.next_success, TIMEOUT)
 
     def mk_warning_popup(self):
         # Makes Warning Popup if input is missing.
