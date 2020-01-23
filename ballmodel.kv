@@ -9,6 +9,13 @@
             pos: self.pos
             size: self.size
 
+    Label:
+        text: "[b][size=32]Enter Treatment Setpoint:[/size][/b]"
+        markup: True
+        x: root.x + root.width * 0.2
+        top: self.height and root.y + root.height * .95
+        color: 1,1,1,1
+
     Image:
         source: 'assets/logo.png'
         x: root.x + root.width * 0.60
@@ -52,7 +59,7 @@
 
     # Acidity Group
     Label:
-        text: '[b][size=24]Acidity[/size][/b]'
+        text: '[b][size=24]pH[/size][/b]'
         markup: True
         x: root.x + root.width * 0.01
         top: self.height and root.y + root.height * 0.525
@@ -124,5 +131,6 @@
         text: "[b]Execute[/b]"
         markup: 'True'
         on_press: root.execute()
-        x: root.x + root.width * 0.75
+        size: root.width * 0.25, root.height * 0.1
+        x: root.x + root.width * 0.70
         top: root.y + root.height * 0.25
